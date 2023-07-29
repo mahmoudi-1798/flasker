@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <!-- To show the message we use a for loop -->
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}            
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>    
+    {% endfor %}
+
+    {% if name %}
+        <h1>List of Users</h1>
+        <br>
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">Email</th>
+                </tr>
+              </thead>
+              {% for our_user in our_users %}
+              <tbody>
+                <tr>
+                  <th scope="row">{{ our_user.id }}</th>
+                  <td>{{ our_user.name }}</td>
+                  <td>{{ our_user.email }}</td>
+                </tr>
+            {% endfor %}
+        </table>    
+    {% else %}
+        <h1>Sign in</h1>
+        <br>
+        <div class="shadow p-3 mb-5 bg-body rounded">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                {{ form.name.label(class="form-label") }}
+                {{ form.name(class="form-control") }}
+                <br>
+                {{ form.email.label(class="form-label") }}
+                {{ form.email(class="form-control") }}
+                <br>
+                {{ form.submit(class="btn btn-secondary") }}
+            </form>
+        </div>
+
+    {% endif %}
+
+{% endblock %}
