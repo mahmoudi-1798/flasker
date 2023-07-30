@@ -10,7 +10,11 @@ from datetime import datetime
 load_dotenv()
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
+# sqlite database
+#app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
+
+# Mysql database
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://kourosh:password@localhost/users"
 app.config["SECRET_KEY"] = "my super secret key"
 
 db = SQLAlchemy(app)
