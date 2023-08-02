@@ -18,6 +18,7 @@
             <th scope="col">ID</th>
             <th scope="col">Username</th>
             <th scope="col">Email</th>
+            <th scope="col">Age</th>
             </tr>
         </thead>
         {% for our_user in our_users %}
@@ -26,6 +27,7 @@
             <th scope="row">{{ our_user.id }}</th>
             <td><a href="{{ url_for('update', id=our_user.id) }}">{{ our_user.name }}</a></td>
             <td>{{ our_user.email }}</td>
+            <td>{{ our_user.age }}</td>
             </tr>
         {% endfor %}
     </table>  

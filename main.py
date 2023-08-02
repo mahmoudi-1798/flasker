@@ -1,10 +1,12 @@
 from flask import Flask, render_template, flash, request, redirect
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, IntegerField
 from wtforms.validators import DataRequired
-from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from datetime import datetime
+
+from dotenv import load_dotenv
 
 #load the environmental variables from the .env file
 load_dotenv()
@@ -18,20 +20,24 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://kourosh:password@localh
 app.config["SECRET_KEY"] = "my super secret key"
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(200), nullable=False, unique=True)
+    age = db.Column(db.Integer)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __init__(self, name, email):
+    def __init__(self, name, email, age):
         self.name = name
         self.email = email
+        self.age = age
 
 class UserForm(FlaskForm):
     name = StringField("Username", validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired()])
+    age = IntegerField("Age")
     submit = SubmitField("Submit")
 
 #Form class, inherited from FlaskForm
@@ -79,7 +85,7 @@ def add_user():
     if form.validate_on_submit():
         user = Users.query.filter_by(email=form.email.data).first()
         if user is None:
-            user = Users(name=form.name.data, email=form.email.data)
+            user = Users(name=form.name.data, email=form.email.data, age=form.age.data)
             db.session.add(user)
             db.session.commit()
             #flash("Form Submitted Successfully.") #To show a message at top after submiting and entering
@@ -89,6 +95,7 @@ def add_user():
         name = form.name.data
         form.name.data = ''
         form.email.data = ''
+        form.age.data = 0
     our_users = Users.query.order_by(Users.date_added)
     return render_template("add_user.html", form=form, name=name, our_users=our_users)
 
@@ -106,6 +113,7 @@ def update(id):
     if request.method == "POST":
         name_to_update.name = request.form["name"]
         name_to_update.email = request.form["email"]
+        name_to_update.age = request.form["age"]
         try:
             db.session.commit()
             flash("User information updated successfully.")
