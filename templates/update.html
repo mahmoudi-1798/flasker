@@ -48,6 +48,7 @@
                 {{ form.age(class="form-control", value=name_to_update.age) }}
                 <br>
                 {{ form.submit(class="btn btn-secondary") }}
+                <a href="{{ url_for('delete', id=id) }}" class="btn btn-danger">Delete</a>
             </form>
         </div>
 

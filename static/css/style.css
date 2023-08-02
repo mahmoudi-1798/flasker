@@ -11,3 +11,8 @@ body {
     font-size: 25px;
     color: darkblue;
 }
+
+td, tr {
+    text-align: center;
+    vertical-align: middle;
+}
