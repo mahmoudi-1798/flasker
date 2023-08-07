@@ -1,10 +1,11 @@
 from flask import Flask, render_template, flash, request, redirect
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField
-from wtforms.validators import DataRequired
+from wtforms import StringField, SubmitField, IntegerField, PasswordField, BooleanField, ValidationError
+from wtforms.validators import DataRequired, EqualTo, Length
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from dotenv import load_dotenv
 
@@ -29,20 +30,39 @@ class Users(db.Model):
     age = db.Column(db.Integer)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __init__(self, name, email, age):
+    password_hash = db.Column(db.String(128))
+
+    @property 
+    def password(self):
+        raise AttributeError("Password is not a readable attribute!")
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+    
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    def __init__(self, name, email, password_hash):
         self.name = name
         self.email = email
-        self.age = age
+        self.password_hash = password_hash
 
 class UserForm(FlaskForm):
     name = StringField("Username", validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired()])
-    age = IntegerField("Age")
+    password_hash = PasswordField("Password", validators=[DataRequired(), EqualTo("password_hash2", message="Passwords doesn't match.")])
+    password_hash2 = PasswordField("Confirm Password", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 #Form class, inherited from FlaskForm
 class NamerForm(FlaskForm):
     name = StringField("Your Name", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
+class PasswordForm(FlaskForm):
+    email = StringField("Email", validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 #Home page
@@ -85,7 +105,8 @@ def add_user():
     if form.validate_on_submit():
         user = Users.query.filter_by(email=form.email.data).first()
         if user is None:
-            user = Users(name=form.name.data, email=form.email.data, age=form.age.data)
+            hashed_pw = generate_password_hash(form.password_hash.data, "sha256") # we hash the password before send it to db
+            user = Users(name=form.name.data, email=form.email.data, password_hash=hashed_pw)
             db.session.add(user)
             db.session.commit()
             #flash("Form Submitted Successfully.") #To show a message at top after submiting and entering
@@ -95,7 +116,8 @@ def add_user():
         name = form.name.data
         form.name.data = ''
         form.email.data = ''
-        form.age.data = 0
+        form.password_hash.data = ''
+
     our_users = Users.query.order_by(Users.date_added)
     return render_template("add_user.html", form=form, name=name, our_users=our_users)
 
@@ -141,3 +163,27 @@ def delete(id):
     except:
         flash("Something went wrong.Try again.")
         return render_template("users_list.html", form=form, name=name, our_users=our_users)
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    email = None
+    password = None
+    entered_pw = None
+    passed = None
+
+    form = PasswordForm()
+    #validate form 
+    if form.validate_on_submit(): 
+        email = form.email.data
+        password = form.password.data
+        form.email.data = ''
+        form.password.data = ''
+
+        entered_pw = Users.query.filter_by(email=email).first()
+
+        passed = check_password_hash(entered_pw.password_hash, password)
+        if passed == True:
+            flash("Login Successfully.")
+            return redirect("/user/{}".format(email)) 
+
+    return render_template("login.html", email=name, password=password, form=form)
