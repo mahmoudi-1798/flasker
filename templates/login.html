@@ -15,17 +15,19 @@
 
     {% else %}
         <h1>Login</h1>
-        <form method="POST">
-            {{ form.hidden_tag() }}
+        <div class="shadow p-3 mb-5 bg-body rounded"></div>
+            <form method="POST">
+                {{ form.hidden_tag() }}
 
-            {{ form.email.label(class="form-label") }}
-            {{ form.email(class="form-control") }}
-            <br>            
-            {{ form.password.label(class="form-label") }}
-            {{ form.password(class="form-control") }}
-            <br>
-            {{ form.submit(class="btn btn-secondary") }}
-        </form>
+                {{ form.email.label(class="form-label") }}
+                {{ form.email(class="form-control") }}
+                <br>            
+                {{ form.password.label(class="form-label") }}
+                {{ form.password(class="form-control") }}
+                <br>
+                {{ form.submit(class="btn btn-secondary") }}
+            </form>
+        </div>
     {% endif %}
 
 {% endblock %}
