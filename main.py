@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash, request, redirect
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField, PasswordField, BooleanField, ValidationError
+from wtforms import StringField, SubmitField, IntegerField, PasswordField, BooleanField,TextAreaField, ValidationError
 from wtforms.validators import DataRequired, EqualTo, Length
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -27,7 +27,6 @@ class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(200), nullable=False, unique=True)
-    age = db.Column(db.Integer)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
 
     password_hash = db.Column(db.String(128))
@@ -47,6 +46,22 @@ class Users(db.Model):
         self.name = name
         self.email = email
         self.password_hash = password_hash
+
+class Posts(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255))
+    content = db.Column(db.Text)
+    author = db.Column(db.String(255))
+    date_posted = db.Column(db.DateTime, default=datetime.utcnow)
+    slug = db.Column(db.String(255))
+
+class PostForm(FlaskForm):
+    title = StringField("Title", validators=[DataRequired()])
+    content = TextAreaField("Content", validators=[DataRequired()])
+    author = StringField("Author", validators=[DataRequired()])
+    slug = StringField("Slug", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
 
 class UserForm(FlaskForm):
     name = StringField("Username", validators=[DataRequired()])
@@ -135,7 +150,6 @@ def update(id):
     if request.method == "POST":
         name_to_update.name = request.form["name"]
         name_to_update.email = request.form["email"]
-        name_to_update.age = request.form["age"]
         try:
             db.session.commit()
             flash("User information updated successfully.")
@@ -187,3 +201,22 @@ def login():
             return redirect("/user/{}".format(email)) 
 
     return render_template("login.html", email=name, password=password, form=form)
+
+@app.route("/add-post", methods=["GET", "POST"])
+def add_post():
+    form = PostForm()
+
+    if form.validate_on_submit():
+        post = Posts(title=form.title.data, content=form.content.data, author=form.author.data, slug=form.slug.data)
+
+        form.title.data = ''
+        form.content.data = ''
+        form.author.data = ''
+        form.slug.data = ''
+
+        db.session.add(post)
+        db.session.commit()
+
+        flash("Blog Posted Successfully.")
+
+    return render_template("add_post.html", form=form)

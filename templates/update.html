@@ -27,7 +27,6 @@
                   <th scope="row">{{ our_user.id }}</th>
                   <td>{{ our_user.name }}</td>
                   <td>{{ our_user.email }}</td>
-                  <td>{{ our_user.age }}</td>
                 </tr>
             {% endfor %}
         </table>    
@@ -44,9 +43,6 @@
                 {{ form.email.label(class="form-label") }}
                 {{ form.email(class="form-control", value=name_to_update.email) }}
                 <br>                
-                {{ form.age.label(class="form-label") }}
-                {{ form.age(class="form-control", value=name_to_update.age) }}
-                <br>
                 {{ form.submit(class="btn btn-secondary") }}
                 <a href="{{ url_for('delete', id=id) }}" class="btn btn-danger">Delete</a>
             </form>
