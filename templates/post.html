@@ -17,4 +17,5 @@
     </div><br>
 
     <a href="{{ url_for('posts') }}" class="btn btn-outline-secondary btn-sm">Back to Posts</a>
+    <a href="{{ url_for('edit_post', id=post.id) }}" class="btn btn-outline-secondary btn-sm">Edit Post</a>
 {% endblock %}

@@ -16,6 +16,7 @@
             {{ post.date_posted }}</small><br><br>
             {{ post.content }}<br><br><br>
             <a href="{{ url_for('post', id=post.id) }}" class="btn btn-outline-secondary btn-sm">View Post</a>
+            <a href="{{ url_for('edit_post', id=post.id) }}" class="btn btn-outline-secondary btn-sm">Edit Post</a>
         </div><br>
     {% endfor %}
 {% endblock %}
