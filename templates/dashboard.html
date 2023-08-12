@@ -10,19 +10,9 @@
     {% endfor %}
 
 
-    <h1>Login</h1><br>
+    <h1>Dashboard</h1><br>
     <div class="shadow p-3 mb-5 bg-body rounded">
-        <form method="POST">
-            {{ form.hidden_tag() }}
-
-            {{ form.username.label(class="form-label") }}
-            {{ form.username(class="form-control") }}
-            <br>            
-            {{ form.password.label(class="form-label") }}
-            {{ form.password(class="form-control") }}
-            <br>
-            {{ form.submit(class="btn btn-secondary") }}
-        </form>
+        <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm">Logout</a>
     </div>
 
 
