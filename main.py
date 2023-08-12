@@ -252,3 +252,22 @@ def edit_post(id):
     form.slug.data = post.slug
 
     return render_template("edit_post.html", form=form)
+
+@app.route("/posts/delete/<int:id>")
+def delete_post(id):
+    post_to_delete = Posts.query.get_or_404(id)
+     
+    try:
+        db.session.delete(post_to_delete)
+        db.session.commit()
+
+        flash("Post has been deleted.")
+        posts = Posts.query.order_by(Posts.date_posted)
+
+        return render_template("posts.html", posts=posts)
+    except:
+        flash("There was a problem. Try again later.")
+
+        posts = Posts.query.order_by(Posts.date_posted)
+
+        return render_template("posts.html", posts=posts)
