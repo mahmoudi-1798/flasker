@@ -6,14 +6,23 @@
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             {{ message }}            
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>    
+        </div>
     {% endfor %}
 
-
-    <h1>Dashboard</h1><br>
-    <div class="shadow p-3 mb-5 bg-body rounded">
-        <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm">Logout</a>
-    </div>
+    <h2>Dashboard</h2><br>
+    <div class="card">
+        <div class="card-header">{{ current_user.name }}</div>
+        <div class="card-body">
+          <h5 class="card-title">User Information</h5>
+          <p class="card-text">
+            <strong>Name: </strong>{{ current_user.name }}<br>
+            <strong>Username: </strong>{{ current_user.username }}<br>
+            <strong>Email: </strong>{{ current_user.email }}<br>
+            <strong>Date Joined: </strong>{{ current_user.date_added }}<br>
+          </p>
+          <a href="{{ url_for('logout') }}" class="btn btn-secondary btn-sm">Logout</a>
+        </div>
+      </div>
 
 
 {% endblock %}

@@ -61,7 +61,6 @@ class Posts(db.Model):
 class PostForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
     content = TextAreaField("Content", validators=[DataRequired()])
-    author = StringField("Author", validators=[DataRequired()])
     slug = StringField("Slug", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
@@ -233,11 +232,10 @@ def add_post():
     form = PostForm()
 
     if form.validate_on_submit():
-        post = Posts(title=form.title.data, content=form.content.data, author=form.author.data, slug=form.slug.data)
+        post = Posts(title=form.title.data, content=form.content.data, author=current_user.name, slug=form.slug.data)
 
         form.title.data = ''
         form.content.data = ''
-        form.author.data = ''
         form.slug.data = ''
 
         db.session.add(post)
@@ -259,12 +257,12 @@ def post(id):
     return render_template("post.html", post=post)
 
 @app.route("/posts/edit/<int:id>", methods=["GET", "POST"])
+@login_required
 def edit_post(id):
     post = Posts.query.get_or_404(id)
     form = PostForm()
     if form.validate_on_submit():
         post.title = form.title.data
-        post.author = form.author.data
         post.content = form.content.data
         post.slug = form.slug.data
 
@@ -273,13 +271,13 @@ def edit_post(id):
         flash("Post has been Updated.")
         return redirect(url_for("post", id=post.id))
     form.title.data = post.title
-    form.author.data = post.author
     form.content.data = post.content
     form.slug.data = post.slug
 
     return render_template("edit_post.html", form=form)
 
 @app.route("/posts/delete/<int:id>")
+@login_required
 def delete_post(id):
     post_to_delete = Posts.query.get_or_404(id)
      
