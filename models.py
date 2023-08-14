@@ -34,6 +34,8 @@ class Users(db.Model, UserMixin):
 
     password_hash = db.Column(db.String(128))
 
+    posts = db.relationship("Posts", backref="poster")
+
     @property 
     def password(self):
         raise AttributeError("Password is not a readable attribute!")
@@ -58,4 +60,4 @@ class Posts(db.Model):
     author = db.Column(db.String(255))
     date_posted = db.Column(db.DateTime, default=datetime.utcnow)
     slug = db.Column(db.String(255))
-
+    poster_id = db.Column(db.Integer, db.ForeignKey("users.id"))

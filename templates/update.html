@@ -8,29 +8,8 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>    
     {% endfor %}
-    
-    {% if name %}
-        <h1>List of Users</h1>
-        <br>
-        <table class="table table-hover table-bordered">
-            <thead>
-                <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">Username</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Age</th>
-                </tr>
-              </thead>
-              {% for our_user in our_users %}
-              <tbody>
-                <tr>
-                  <th scope="row">{{ our_user.id }}</th>
-                  <td>{{ our_user.name }}</td>
-                  <td>{{ our_user.email }}</td>
-                </tr>
-            {% endfor %}
-        </table>    
-    {% else %}
+
+    {% if id == current_user.id %}
         <h1>Update User Information</h1>
         <br>
         <div class="shadow p-3 mb-5 bg-body rounded">
@@ -49,7 +28,11 @@
                 {{ form.submit(class="btn btn-secondary") }}
             </form>
         </div>
-
+    {% else %}
+        <center>
+            <h1>Access Denied.</h1>
+            <h5>You can not access this user profile.</h5>
+        </center>
     {% endif %}
 
 {% endblock %}
