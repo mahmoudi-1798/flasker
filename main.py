@@ -1,110 +1,10 @@
-from flask import Flask, render_template, flash, request, redirect, url_for
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField, PasswordField, BooleanField,TextAreaField, ValidationError
-from wtforms.validators import DataRequired, EqualTo, Length
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin, LoginManager, login_required, login_user, logout_user, current_user
-
-from dotenv import load_dotenv
-
-#load the environmental variables from the .env file
-load_dotenv()
-
-app = Flask(__name__)
-# sqlite database
-#app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
-
-# Mysql database
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://kourosh:password@localhost/users"
-app.config["SECRET_KEY"] = "my super secret key"
-
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-
-class Users(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(200), nullable=False, unique=True)
-    name = db.Column(db.String(200), nullable=False)
-    email = db.Column(db.String(200), nullable=False, unique=True)
-    date_added = db.Column(db.DateTime, default=datetime.utcnow)
-
-    password_hash = db.Column(db.String(128))
-
-    @property 
-    def password(self):
-        raise AttributeError("Password is not a readable attribute!")
-
-    @password.setter
-    def password(self, password):
-        self.password_hash = generate_password_hash(password)
-    
-    def verify_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
-    def __init__(self,username, name, email, password_hash):
-        self.username = username
-        self.name = name
-        self.email = email
-        self.password_hash = password_hash
-
-class Posts(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(255))
-    content = db.Column(db.Text)
-    author = db.Column(db.String(255))
-    date_posted = db.Column(db.DateTime, default=datetime.utcnow)
-    slug = db.Column(db.String(255))
-
-class PostForm(FlaskForm):
-    title = StringField("Title", validators=[DataRequired()])
-    content = TextAreaField("Content", validators=[DataRequired()])
-    slug = StringField("Slug", validators=[DataRequired()])
-    submit = SubmitField("Submit")
-
-class UserForm(FlaskForm):
-    name = StringField("Name", validators=[DataRequired()])
-    username = StringField("Username", validators=[DataRequired()])
-    email = StringField("Email", validators=[DataRequired()])
-    password_hash = PasswordField("Password", validators=[DataRequired(), EqualTo("password_hash2", message="Passwords doesn't match.")])
-    password_hash2 = PasswordField("Confirm Password", validators=[DataRequired()])
-    submit = SubmitField("Submit")
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = "login"
-
-@login_manager.user_loader
-def load_user(user_id):
-    return Users.query.get(int(user_id))
-
-
-class LoginForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired()])
-    submit = SubmitField("Submit")
-
-#Form class, inherited from FlaskForm
-class NamerForm(FlaskForm):
-    name = StringField("Your Name", validators=[DataRequired()])
-    submit = SubmitField("Submit")
-
-class PasswordForm(FlaskForm):
-    email = StringField("Email", validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired()])
-    submit = SubmitField("Submit")
+from websforms import LoginForm, PostForm, UserForm, NamerForm, PasswordForm
+from models import *
 
 #Home page
 @app.route('/')
 def index():
     return render_template("index.html")
-
-# User page
-@app.route('/user/<name>')
-def user(name):
-    return render_template("user.html", name=name)
 
 #Custome Error Page
 #Invalid URL error
@@ -117,18 +17,7 @@ def page_not_found(e):
 def server_error(e):
     return render_template("500.html"), 500
 
-# Form page 
-@app.route("/name", methods=["GET", "POST"])
-def name():
-    name = None
-    form = NamerForm()
-    #validate form 
-    if form.validate_on_submit():
-        name = form.name.data
-        form.name.data = ''
-        flash("Form Submitted Successfully.") #To show a message at top after submiting and entering
-    return render_template("name.html", name=name, form=form)
-
+#Sign-in
 @app.route("/user/add", methods=["GET", "POST"])
 def add_user():
     name = None
@@ -153,6 +42,7 @@ def add_user():
     our_users = Users.query.order_by(Users.date_added)
     return render_template("add_user.html", form=form, name=name, our_users=our_users)
 
+#List of Users
 @app.route("/list")
 def users_list():
     form = UserForm()
@@ -160,6 +50,7 @@ def users_list():
     flash("Form Submitted Successfully.") #To show a message at top after submiting and entering
     return render_template("users_list.html", form=form, our_users=our_users)
 
+#Update User
 @app.route("/update/<int:id>", methods=["GET", "POST"])
 def update(id):
     form = UserForm()
@@ -214,13 +105,6 @@ def login():
 
     return render_template("login.html", form=form) 
 
-@app.route("/dashboard", methods=["GET", "POST"])
-@login_required
-def dashboard():
-    form = LoginForm()
-    flash("Logged in Successfully.")
-    return render_template("dashboard.html") 
-
 @app.route("/logout", methods=["GET", "POST"])
 @login_required
 def logout():
@@ -228,6 +112,12 @@ def logout():
     flash("You has been logged out.")
     return redirect(url_for("login"))
 
+@app.route("/dashboard", methods=["GET", "POST"])
+@login_required
+def dashboard():
+    form = LoginForm()
+    flash("Logged in Successfully.")
+    return render_template("dashboard.html") 
 
 @app.route("/add-post", methods=["GET", "POST"])
 def add_post():
