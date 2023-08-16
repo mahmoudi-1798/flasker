@@ -14,7 +14,7 @@
             <h2>{{ post.title }}</h2>
             <small>By: {{ post.poster.username }}<br>
             {{ post.date_posted }}</small><br><br>
-            {{ post.content }}<br><br><br>
+            {{ post.content|safe }}<br><br><br>   <!-- |safe is for CKEditor to show the text not in the html form -->
             <a href="{{ url_for('post', id=post.id) }}" class="btn btn-outline-secondary btn-sm">View Post</a>
             {% if post.poster.id == current_user.id %}
                 <a href="{{ url_for('edit_post', id=post.id) }}" class="btn btn-outline-secondary btn-sm">Edit Post</a>

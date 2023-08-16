@@ -13,7 +13,7 @@
         <h2>{{ post.title }}</h2>
         <small>By: {{ post.poster.username }}<br>
         {{ post.date_posted }}</small><br><br>
-        {{ post.content }}<br><br>
+        {{ post.content|safe }}<br><br>  <!-- |safe is for CKEditor to show the text not in the html form -->
     </div><br>
 
     <a href="{{ url_for('posts') }}" class="btn btn-outline-secondary btn-sm">Back to Posts</a>

@@ -5,12 +5,15 @@ from flask_migrate import Migrate
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, LoginManager, login_required, login_user, logout_user, current_user
+from flask_ckeditor import CKEditor
 
 #load the environmental variables from the .env file
 #from dotenv import load_dotenv
 #load_dotenv()
 
 app = Flask(__name__)
+
+ckeditor = CKEditor(app)
 
 # Mysql database
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://kourosh:password@localhost/users"
