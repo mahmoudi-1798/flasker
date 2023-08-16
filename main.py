@@ -1,4 +1,4 @@
-from websforms import LoginForm, PostForm, UserForm, NamerForm, PasswordForm
+from websforms import LoginForm, PostForm, UserForm, NamerForm, PasswordForm, SearchForm
 from models import *
 
 #Home page
@@ -203,4 +203,27 @@ def delete_post(id):
         posts = Posts.query.order_by(Posts.date_posted)
 
         return render_template("posts.html", posts=posts)
+
+@app.context_processor
+def base():
+    form = SearchForm()
+    return dict(form=form)
+
+@app.route("/search", methods=['POST'])
+def search():
+    form = SearchForm()
+    posts = Posts.query
+    if form.validate_on_submit():
+        post.searched = form.searched.data
+
+        posts = posts.filter(
+            or_(
+                Posts.content.like('%' + post.searched + '%'),
+                Posts.author.like('%' + post.searched + '%'),
+                Posts.title.like('%' + post.searched + '%')
+            )
+        )
+        posts = posts.order_by(Posts.title).all()
         
+
+        return render_template("search.html", form=form, searched=post.searched, posts=posts)

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <br>
+    <h2>Reasults for "{{ searched }}":</h2>
+    <br>
+
+    {% for post in posts %}
+        <div class="shadow p-3 mb-5 bg-body rounded">
+            <h2>{{ post.title }}</h2>
+            <small>By: {{ post.poster.username }}<br>
+            {{ post.date_posted }}</small><br><br>
+            <a href="{{ url_for('post', id=post.id) }}" class="btn btn-outline-secondary btn-sm">View Post</a>
+            {% if post.poster.id == current_user.id %}
+                <a href="{{ url_for('edit_post', id=post.id) }}" class="btn btn-outline-secondary btn-sm">Edit Post</a>
+                <a href="{{ url_for('delete_post', id=post.id) }}" class="btn btn-outline-danger btn-sm">Delete Post</a>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endblock%}
