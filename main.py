@@ -30,7 +30,7 @@ def add_user():
             db.session.add(user)
             db.session.commit()
             #flash("Form Submitted Successfully.") #To show a message at top after submiting and entering
-            return redirect("/list")
+            return redirect("/login")
         else:
             flash("User with this email exsist.") 
         name = form.name.data
@@ -154,37 +154,53 @@ def post(id):
 def edit_post(id):
     post = Posts.query.get_or_404(id)
     form = PostForm()
-    if form.validate_on_submit():
-        post.title = form.title.data
-        post.content = form.content.data
-        post.slug = form.slug.data
+    id = current_user.id
 
-        db.session.add(post)
-        db.session.commit()
-        flash("Post has been Updated.")
-        return redirect(url_for("post", id=post.id))
-    form.title.data = post.title
-    form.content.data = post.content
-    form.slug.data = post.slug
+    if id == post.poster.id:
+        if form.validate_on_submit():
+            post.title = form.title.data
+            post.content = form.content.data
+            post.slug = form.slug.data
 
-    return render_template("edit_post.html", form=form)
+            db.session.add(post)
+            db.session.commit()
+            flash("Post has been Updated.")
+            return redirect(url_for("post", id=post.id))
+        form.title.data = post.title
+        form.content.data = post.content
+        form.slug.data = post.slug
+
+        return render_template("edit_post.html", form=form)
+    else:
+        flash("You are not authorized to edit this post.")
+        posts = Posts.query.order_by(Posts.date_posted)
+
+        return render_template("posts.html", posts=posts)
 
 @app.route("/posts/delete/<int:id>")
 @login_required
 def delete_post(id):
     post_to_delete = Posts.query.get_or_404(id)
-     
-    try:
-        db.session.delete(post_to_delete)
-        db.session.commit()
+    id = current_user.id
 
-        flash("Post has been deleted.")
+    if id == post_to_delete.poster.id:
+        try:
+            db.session.delete(post_to_delete)
+            db.session.commit()
+
+            flash("Post has been deleted.")
+            posts = Posts.query.order_by(Posts.date_posted)
+
+            return render_template("posts.html", posts=posts)
+        except:
+            flash("There was a problem. Try again later.")
+
+            posts = Posts.query.order_by(Posts.date_posted)
+
+            return render_template("posts.html", posts=posts)
+    else:
+        flash("You are not authorized to delete this post.")
         posts = Posts.query.order_by(Posts.date_posted)
 
         return render_template("posts.html", posts=posts)
-    except:
-        flash("There was a problem. Try again later.")
-
-        posts = Posts.query.order_by(Posts.date_posted)
-
-        return render_template("posts.html", posts=posts)
+        
