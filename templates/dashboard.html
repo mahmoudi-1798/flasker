@@ -18,15 +18,16 @@
               <div class="row">
                 <div class="col-8">
             
-              <strong>Name:</strong>{{ current_user.name }}<br/>
+              <strong>Name: </strong>{{ current_user.name }}<br/>
             
-              <strong>Username:</strong>{{ current_user.username }}<br/>
+              <strong>Username: </strong>{{ current_user.username }}<br/>
             
-              <strong>User Id:</strong>{{ current_user.id }}<br/>
+              <strong>User Id: </strong>{{ current_user.id }}<br/>
             
-              <strong>Email:</strong>{{ current_user.email }}<br/>
+              <strong>Email: </strong>{{ current_user.email }}<br/>
       
-              <strong>Date Joined:</strong>{{ current_user.date_added }}<br/>
+              <strong>Date Joined: </strong>{{ current_user.date_added }}<br/>
+              <strong>About: </strong>{{ current_user.about }}<br/><br>
                 </p>
                 <a href="{{ url_for('logout')}}" class="btn btn-secondary btn-sm">Logout</a>
             

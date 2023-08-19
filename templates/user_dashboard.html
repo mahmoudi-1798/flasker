@@ -2,22 +2,46 @@
 
 {% block content %}
 
-    <h2>Dashboard</h2><br>
-    <div class="card">
-        <div class="card-header">{{ user_to_show.name }}</div>
-        <div class="card-body">
-          <h5 class="card-title"><b>User Information</b></h5>
-          <p class="card-text">
-            <strong>Name: </strong>{{ user_to_show.name }}<br>
-            <strong>Username: </strong>{{ user_to_show.username }}<br>
-            <strong>Email: </strong>{{ user_to_show.email }}<br>
-            <strong>Date Joined: </strong>{{ user_to_show.date_added }}<br>
-          </p>
-          <a href="{{ url_for('logout') }}" class="btn btn-secondary btn-sm">Logout</a>
-          <a href="{{ url_for('update', id=id) }}"  class="btn btn-secondary btn-sm">Update Profile</a>
-          <a href="{{ url_for('delete', id=id) }}" class="btn btn-danger btn-sm">Delete</a>
-        </div>
+<h2>Dashboard</h2><br>
+<div class="card">
+    <div class="card-header">{{ current_user.name }}</div>
+    <div class="card-body">
+      <p class="card-text">
+        <div class="container">
+          <div class="row">
+            <div class="col-8">
+        
+          <strong>Name: </strong>{{ user_to_show.name }}<br/>
+        
+          <strong>Username: </strong>{{ user_to_show.username }}<br/>
+        
+          <strong>User Id: </strong>{{ user_to_show.id }}<br/>
+        
+          <strong>Email: </strong>{{ user_to_show.email }}<br/>
+  
+          <strong>Date Joined: </strong>{{ user_to_show.date_added }}<br/>
+          <strong>About: </strong>{{ user_to_show.about }}<br/>
+            </p>
+            
+            <a href="{{ url_for('logout')}}" class="btn btn-secondary btn-sm">Logout</a>
+        
+            <a href="{{ url_for('update', id=current_user.id)}}" class="btn btn-secondary btn-sm">Update Profile</a>
+        
+            <a href="{{ url_for('delete', id=current_user.id)}}" class="btn btn-danger btn-sm">Delete</a>
+            <br/><br/>
+        
+                </div>
+                <div class="col-4">
+                  <img src="{{ url_for('static', filename='images/default_profile_pic.png') }}" alt="profile_picture" width="150px" align="right">
+
       </div>
+    </div>
+    </div>
+  
+  
+    </div>
+  </div>
+
 
 
 {% endblock %}

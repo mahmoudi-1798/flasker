@@ -24,7 +24,10 @@
                 <br>                   
                 {{ form.email.label(class="form-label") }}
                 {{ form.email(class="form-control", value=name_to_update.email) }}
-                <br>                
+                <br>            
+                {{ form.about.label(class="form-label") }}
+                {{ form.about(class="form-control", value=name_to_update.about) }}
+                <br>             
                 {{ form.submit(class="btn btn-secondary") }}
             </form>
         </div>

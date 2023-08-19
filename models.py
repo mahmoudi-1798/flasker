@@ -34,6 +34,7 @@ class Users(db.Model, UserMixin):
     username = db.Column(db.String(200), nullable=False, unique=True)
     name = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(200), nullable=False, unique=True)
+    about = db.Column(db.String(500), nullable=True)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
 
     password_hash = db.Column(db.String(128))
