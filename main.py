@@ -119,6 +119,13 @@ def dashboard():
     flash("Logged in Successfully.")
     return render_template("dashboard.html") 
 
+@app.route("/dashboard/<int:id>")
+def user_dashboard(id):
+    user_to_show = Users.query.get_or_404(id)
+
+    if current_user.username == "admin":
+        return render_template("user_dashboard.html", user_to_show=user_to_show, id=id)
+
 @app.route("/add-post", methods=["GET", "POST"])
 def add_post():
     form = PostForm()
@@ -156,7 +163,7 @@ def edit_post(id):
     form = PostForm()
     id = current_user.id
 
-    if id == post.poster.id:
+    if id == post.poster.id or current_user.username == "admin":
         if form.validate_on_submit():
             post.title = form.title.data
             post.content = form.content.data
@@ -183,7 +190,7 @@ def delete_post(id):
     post_to_delete = Posts.query.get_or_404(id)
     id = current_user.id
 
-    if id == post_to_delete.poster.id:
+    if id == post_to_delete.poster.id or current_user.username == "admin":
         try:
             db.session.delete(post_to_delete)
             db.session.commit()
@@ -227,3 +234,8 @@ def search():
         
 
         return render_template("search.html", form=form, searched=post.searched, posts=posts)
+
+@app.route("/admin")
+@login_required
+def admin():
+    return render_template("admin.html")

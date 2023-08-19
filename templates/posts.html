@@ -16,7 +16,7 @@
             {{ post.date_posted }}</small><br><br>
             {{ post.content|safe }}<br><br><br>   <!-- |safe is for CKEditor to show the text not in the html form -->
             <a href="{{ url_for('post', id=post.id) }}" class="btn btn-outline-secondary btn-sm">View Post</a>
-            {% if post.poster.id == current_user.id %}
+            {% if post.poster.id == current_user.id or current_user.username =="admin" %}
                 <a href="{{ url_for('edit_post', id=post.id) }}" class="btn btn-outline-secondary btn-sm">Edit Post</a>
                 <a href="{{ url_for('delete_post', id=post.id) }}" class="btn btn-outline-danger btn-sm">Delete Post</a>
             {% endif %}

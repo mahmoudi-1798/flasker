@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h2>Dashboard</h2><br>
+    <div class="card">
+        <div class="card-header">{{ user_to_show.name }}</div>
+        <div class="card-body">
+          <h5 class="card-title"><b>User Information</b></h5>
+          <p class="card-text">
+            <strong>Name: </strong>{{ user_to_show.name }}<br>
+            <strong>Username: </strong>{{ user_to_show.username }}<br>
+            <strong>Email: </strong>{{ user_to_show.email }}<br>
+            <strong>Date Joined: </strong>{{ user_to_show.date_added }}<br>
+          </p>
+          <a href="{{ url_for('logout') }}" class="btn btn-secondary btn-sm">Logout</a>
+          <a href="{{ url_for('update', id=id) }}"  class="btn btn-secondary btn-sm">Update Profile</a>
+          <a href="{{ url_for('delete', id=id) }}" class="btn btn-danger btn-sm">Delete</a>
+        </div>
+      </div>
+
+
+{% endblock %}
