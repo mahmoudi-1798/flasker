@@ -1,5 +1,8 @@
 from websforms import LoginForm, PostForm, UserForm, NamerForm, PasswordForm, SearchForm
 from models import *
+from werkzeug.utils import secure_filename
+import uuid as uuid
+import os
 
 #Home page
 @app.route('/')
@@ -60,6 +63,13 @@ def update(id):
         name_to_update.username = request.form["username"]
         name_to_update.email = request.form["email"]
         name_to_update.about = request.form["about"]
+        name_to_update.profile_pic = request.files["profile_pic"]
+        
+        pic_filename = secure_filename(name_to_update.profile_pic.filename)
+        pic_name = str(uuid.uuid1()) + "_" + pic_filename
+        #save pic to images
+        name_to_update.profile_pic.save(os.path.join(app.config['UPLOAD_FOLDER'],pic_name))
+        name_to_update.profile_pic = pic_name
         try:
             db.session.commit()
             flash("User information updated successfully.")

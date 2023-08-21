@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, IntegerField, PasswordField, BooleanField,TextAreaField, ValidationError
 from flask_ckeditor import CKEditorField
 from wtforms.validators import DataRequired, EqualTo, Length
+from flask_wtf.file import FileField
 
 class PostForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
@@ -15,6 +16,7 @@ class UserForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired()])
     about = TextAreaField("About")
+    profile_pic = FileField("Profile Picture")
     password_hash = PasswordField("Password", validators=[DataRequired(), EqualTo("password_hash2", message="Passwords doesn't match.")])
     password_hash2 = PasswordField("Confirm Password", validators=[DataRequired()])
     submit = SubmitField("Submit")

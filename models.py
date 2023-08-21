@@ -18,6 +18,10 @@ ckeditor = CKEditor(app)
 # Mysql database
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://kourosh:password@localhost/users"
 app.config["SECRET_KEY"] = "my super secret key"
+
+UPLOAD_FOLDER = '/home/kourosh/Desktop/Coding/Main/flasker/static/images/'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
@@ -36,7 +40,7 @@ class Users(db.Model, UserMixin):
     email = db.Column(db.String(200), nullable=False, unique=True)
     about = db.Column(db.String(500), nullable=True)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
-
+    profile_pic = db.Column(db.String(300), nullable=True)
     password_hash = db.Column(db.String(128))
 
     posts = db.relationship("Posts", backref="poster")

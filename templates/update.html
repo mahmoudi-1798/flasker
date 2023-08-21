@@ -13,7 +13,7 @@
         <h1>Update User Information</h1>
         <br>
         <div class="shadow p-3 mb-5 bg-body rounded">
-            <form action="/update/{{ name_to_update.id }}"  method="POST">
+            <form action="/update/{{ name_to_update.id }}"  method="POST" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
 
                 {{ form.name.label(class="form-label") }}
@@ -28,6 +28,9 @@
                 {{ form.about.label(class="form-label") }}
                 {{ form.about(class="form-control", value=name_to_update.about) }}
                 <br>             
+                {{ form.profile_pic.label(class="form-label") }}
+                {{ form.profile_pic(class="form-control", value=name_to_update.profile_pic) }}
+                <br>  
                 {{ form.submit(class="btn btn-secondary") }}
             </form>
         </div>

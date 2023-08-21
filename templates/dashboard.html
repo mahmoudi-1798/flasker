@@ -27,6 +27,7 @@
               <strong>Email: </strong>{{ current_user.email }}<br/>
       
               <strong>Date Joined: </strong>{{ current_user.date_added }}<br/>
+              <strong>Profile Picture: </strong>{{ current_user.profile_pic }}<br/>
               <strong>About: </strong>{{ current_user.about }}<br/><br>
                 </p>
                 <a href="{{ url_for('logout')}}" class="btn btn-secondary btn-sm">Logout</a>
@@ -38,9 +39,11 @@
             
                     </div>
                     <div class="col-4">
-                      <img src="{{ url_for('static', filename='images/default_profile_pic.png') }}" alt="profile_picture" width="150px" align="right">
-	
-          </div>
+                      {% if current_user.profile_pic == None %}
+                        <img src="{{ url_for('static', filename='images/default_profile_pic.png') }}" alt="profile_picture" width="150px" align="right">
+                      {% else %}
+                      <img src="{{ url_for('static', filename='images/{{ current_user.profile_pic }}') }}" alt="profile_picture" width="150px" align="right">
+                      {% endif %}
         </div>
         </div>
       
