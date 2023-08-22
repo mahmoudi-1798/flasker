@@ -9,7 +9,7 @@
         </div>    
     {% endfor %}
 
-    <h1>New Post</h1>
+    <h1>New Post</h1><hr>
     <br>
     <div class="shadow p-3 mb-5 bg-body rounded">
         <form method="POST">
@@ -24,7 +24,7 @@
             {{ form.content.label(class="form-label") }}
             {{ form.content(class="form-control", rows="10") }}
             <br>
-            {{ form.submit(class="btn btn-secondary") }}
+            {{ form.submit(class="btn btn-success") }}
         </form>
 
         {{ ckeditor.load() }}

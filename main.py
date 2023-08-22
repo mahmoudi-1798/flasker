@@ -7,7 +7,8 @@ import os
 #Home page
 @app.route('/')
 def index():
-    return render_template("index.html")
+    posts = Posts.query
+    return render_template("index.html", posts=posts)
 
 #Custome Error Page
 #Invalid URL error
@@ -150,8 +151,9 @@ def logout():
 @login_required
 def dashboard():
     form = LoginForm()
+    posts = Posts.query
     flash("Logged in Successfully.")
-    return render_template("dashboard.html") 
+    return render_template("dashboard.html", posts=posts) 
 
 @app.route("/add-post", methods=["GET", "POST"])
 def add_post():

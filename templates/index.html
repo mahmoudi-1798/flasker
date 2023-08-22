@@ -2,8 +2,37 @@
 
 {% block content %}
 
-    <h1>Hello World!</h1>
+    <div class="card">
+        <div class="card-body" style="padding: 70px 0;">
+            <img src="../static/images/Slice 1.png" style="display: flex;margin-inline: auto;" alt="">
+            <h2 style="text-align: center; padding-top: 50px; padding-bottom: 20px;">Flasker: Unveiling Stories and Spirits</h2>
+            <p style="text-align: center; padding-inline: 200px; font-size: 19px;">
+                Welcome to Flasker, a captivating online haven where captivating stories and the spirit of 
+                adventure converge. Our name pays homage to a bygone era when daring whisky smugglers, known 
+                as "Flaskers," navigated secret paths to bring their prized spirits to those who craved 
+                authenticity and taste beyond boundaries.
+            </p><p style="text-align: center; padding-inline: 200px;  font-size: 19px;">
+                But that's not all. We've imbued Flasker with the essence of its historical namesake. 
+                The very letter "L" in our name transforms into a bottle, capturing the essence of the 
+                liquid treasures that once flowed through secret channels. It serves as a symbol of the 
+                blend between tradition and modernity, where age-old tales find a contemporary voice.
+            </p>
+        </div>
+    </div>
 
-    <p>This is my first web page!!</p>
+    <br>
+    {% for post in posts %}
+        <div class="shadow p-3 mb-5 bg-body rounded">
+            <h2>{{ post.title }}</h2>
+            <small>By: {{ post.poster.username }}<br>
+            {{ post.date_posted }}</small><br><br>
+            {{ post.content|safe }}<br><br><br>   <!-- |safe is for CKEditor to show the text not in the html form -->
+            <a href="{{ url_for('post', id=post.id) }}" class="btn btn-outline-success btn-sm">View Post</a>
+            {% if post.poster.id == current_user.id or current_user.username =="admin" %}
+                <a href="{{ url_for('edit_post', id=post.id) }}" class="btn btn-outline-success btn-sm">Edit Post</a>
+                <a href="{{ url_for('delete_post', id=post.id) }}" class="btn btn-outline-danger btn-sm">Delete Post</a>
+            {% endif %}
+        </div><br>
+    {% endfor %}
 
 {% endblock %}

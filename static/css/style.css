@@ -1,18 +1,64 @@
 h1 {
-    color: darkblue;
+    color: #0B3D0A;
     font-size: 60px;
 }
 
 body {
     background: #f4f4f4;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 #demo {
     font-size: 25px;
-    color: darkblue;
+    color: #0B3D0A;
 }
 
 td, tr {
     text-align: center;
     vertical-align: middle;
+}
+
+.navbar{
+    font-size: 20px;
+    margin-top: -10px;
+    padding-bottom: 0;
+    box-shadow: 0 1px 20px 1px #b7b7b7;
+}
+.collapse.navbar-collapse{
+    padding-top: 10px;
+}
+.nav-link {
+    color: #0B3D0A;
+}
+.dashboard-img {
+    border-radius: 50%;
+}
+#post p {
+    padding-inline: 40px;
+}
+.footer {
+    background-color: #041b04;
+    height: 200px;
+}
+.copyright {
+    color: white;
+    font-size: 15px;
+    font-weight: 300;
+    text-align: center;
+}
+.github{
+    margin-bottom: 60px;
+    font-size: 40px;
+    text-align: center;
+    padding-top: 30px;
+}
+.github i {
+    background-color: #abc2a935; 
+    padding: 10px;
+    color: white;
+}
+.github:hover{
+    cursor: pointer;
 }
