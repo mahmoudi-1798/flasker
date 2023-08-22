@@ -26,7 +26,7 @@
                 {{ form.email(class="form-control", value=name_to_update.email) }}
                 <br>            
                 {{ form.about.label(class="form-label") }}
-                {{ form.about(class="form-control", value=name_to_update.about) }}
+                <textarea name="about" class="form-control">{{ name_to_update.about }}</textarea>
                 <br>             
                 {{ form.profile_pic.label(class="form-label") }}
                 {{ form.profile_pic(class="form-control", value=name_to_update.profile_pic) }}

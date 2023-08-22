@@ -39,10 +39,10 @@
             
                     </div>
                     <div class="col-4">
-                      {% if current_user.profile_pic == None %}
-                        <img src="{{ url_for('static', filename='images/default_profile_pic.png') }}" alt="profile_picture" width="150px" align="right">
+                      {% if current_user.profile_pic %}
+                        <img src="{{ url_for('static', filename='images/' + current_user.profile_pic) }}" alt="profile_picture" width="200px" align="right">
                       {% else %}
-                      <img src="{{ url_for('static', filename='images/{{ current_user.profile_pic }}') }}" alt="profile_picture" width="150px" align="right">
+                        <img src="{{ url_for('static', filename='images/default_profile_pic.png') }}" alt="profile_picture" width="250px" align="right">
                       {% endif %}
         </div>
         </div>

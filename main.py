@@ -63,22 +63,29 @@ def update(id):
         name_to_update.username = request.form["username"]
         name_to_update.email = request.form["email"]
         name_to_update.about = request.form["about"]
-        name_to_update.profile_pic = request.files["profile_pic"]
         
-        pic_filename = secure_filename(name_to_update.profile_pic.filename)
-        pic_name = str(uuid.uuid1()) + "_" + pic_filename
-        #save pic to images
-        name_to_update.profile_pic.save(os.path.join(app.config['UPLOAD_FOLDER'],pic_name))
-        name_to_update.profile_pic = pic_name
-        try:
+        if request.files["profile_pic"]:
+            name_to_update.profile_pic = request.files["profile_pic"]
+
+            pic_filename = secure_filename(name_to_update.profile_pic.filename)
+            pic_name = str(uuid.uuid1()) + "_" + pic_filename
+            #save pic to images
+            name_to_update.profile_pic.save(os.path.join(app.config['UPLOAD_FOLDER'],pic_name))
+            name_to_update.profile_pic = pic_name
+            try:
+                db.session.commit()
+                flash("User information updated successfully.")
+                return redirect(url_for("dashboard"))
+                #return render_template("update.html", form=form, name_to_update=name_to_update, id=id)
+            except:
+                db.session.commit()
+                flash("Something went wrong.Try again later.")
+                return render_template("update.html", form=form, name_to_update=name_to_update, id=id)
+        else:
             db.session.commit()
             flash("User information updated successfully.")
             return redirect(url_for("dashboard"))
-            #return render_template("update.html", form=form, name_to_update=name_to_update, id=id)
-        except:
-            db.session.commit()
-            flash("Something went wrong.Try again later.")
-            return render_template("update.html", form=form, name_to_update=name_to_update, id=id)
+
     else:
         return render_template("update.html", form=form, name_to_update=name_to_update, id=id)
 
