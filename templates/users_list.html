@@ -25,7 +25,7 @@
         <tbody>
             <tr>
             <th scope="row">{{ our_user.id }}</th>
-            <td><a href="{{ url_for('user_dashboard', id=our_user.id) }}">{{ our_user.username }}</a></td>
+            <td>{{ our_user.username }}</td>
             <td>{{ our_user.name }}</td>
             <td>{{ our_user.email }}</td>
             <td><a href="{{ url_for('delete', id=our_user.id) }}" class="btn btn-danger">Delete</a></td>

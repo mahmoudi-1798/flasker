@@ -106,6 +106,22 @@ def delete(id):
         flash("Something went wrong.Try again.")
         return render_template("users_list.html", form=form, name=name, our_users=our_users)
 
+@app.route("/delete_pic/<int:id>")
+def delete_pic(id):
+    user_to_delete = Users.query.get_or_404(id)
+    name = None
+    form = UserForm()
+
+    try:
+        db.session.delete(user_to_delete.profile_pic)
+        db.session.commit()
+        flash("Profile Picture Deleted Succussfully.")
+
+        return render_template("dashboard.html") 
+    except:
+        flash("Something went wrong.Try again.")
+        return render_template("dashboard.html") 
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
@@ -136,13 +152,6 @@ def dashboard():
     form = LoginForm()
     flash("Logged in Successfully.")
     return render_template("dashboard.html") 
-
-@app.route("/dashboard/<int:id>")
-def user_dashboard(id):
-    user_to_show = Users.query.get_or_404(id)
-
-    if current_user.username == "admin":
-        return render_template("user_dashboard.html", user_to_show=user_to_show, id=id)
 
 @app.route("/add-post", methods=["GET", "POST"])
 def add_post():

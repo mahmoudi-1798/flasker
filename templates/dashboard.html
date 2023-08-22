@@ -27,14 +27,18 @@
               <strong>Email: </strong>{{ current_user.email }}<br/>
       
               <strong>Date Joined: </strong>{{ current_user.date_added }}<br/>
-              <strong>Profile Picture: </strong>{{ current_user.profile_pic }}<br/>
+              <!--<strong>Profile Picture: </strong>{{ current_user.profile_pic }}<br/>-->
               <strong>About: </strong>{{ current_user.about }}<br/><br>
                 </p>
                 <a href="{{ url_for('logout')}}" class="btn btn-secondary btn-sm">Logout</a>
             
                 <a href="{{ url_for('update', id=current_user.id)}}" class="btn btn-secondary btn-sm">Update Profile</a>
             
-                <a href="{{ url_for('delete', id=current_user.id)}}" class="btn btn-danger btn-sm">Delete</a>
+                <a href="{{ url_for('delete', id=current_user.id)}}" class="btn btn-danger btn-sm">Delete Account</a>
+                {% if current_user.profile_pic %}
+                  <a href="{{ url_for('delete_pic', id=current_user.id)}}" class="btn btn-danger btn-sm">Delete Profile Picture</a>
+                {% endif %}
+
                 <br/><br/>
             
                     </div>
@@ -42,7 +46,7 @@
                       {% if current_user.profile_pic %}
                         <img src="{{ url_for('static', filename='images/' + current_user.profile_pic) }}" alt="profile_picture" width="200px" align="right">
                       {% else %}
-                        <img src="{{ url_for('static', filename='images/default_profile_pic.png') }}" alt="profile_picture" width="250px" align="right">
+                        <img src="{{ url_for('static', filename='images/default_profile_pic.png') }}" alt="profile_picture" width="200px" align="right">
                       {% endif %}
         </div>
         </div>

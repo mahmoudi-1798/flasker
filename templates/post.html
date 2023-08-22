@@ -14,6 +14,32 @@
         <small>By: {{ post.poster.username }}<br>
         {{ post.date_posted }}</small><br><br>
         {{ post.content|safe }}<br><br>  <!-- |safe is for CKEditor to show the text not in the html form -->
+
+        <div class="card mb-3" > <!-- style="margin-inline: 50px;" -->
+            <div class="row no-gutters" >
+                <div class="col-md-1">
+                    {% if post.poster.profile_pic %}
+                        <img src="{{ url_for('static', filename='images/' + post.poster.profile_pic) }}" alt="profile_picture" width="100px" align="right">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='images/default_profile_pic.png') }}" alt="profile_picture" width="100px" align="right">
+                    {% endif %}
+                </div>
+                <div class="col-md-10">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ post.poster.name }}
+                        </h5>
+                        <p class="card-text">
+                            {% if post.poster.about %}
+                                {{ post.poster.about }}
+                            {% else %}
+                                Author has no about section yet ..
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div><br>
 
     <a href="{{ url_for('posts') }}" class="btn btn-outline-secondary btn-sm">Back to Posts</a>
