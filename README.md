@@ -1,5 +1,5 @@
 # Flasker Blog Website
-![alt text](https://github.com/mahmoudi-1798/flasker/blob/master/static/images/screenshot.png?raw=true)
+![alt text](https://github.com/mahmoudi-1798/flasker/blob/master/static/images/Screenshot.png?raw=true)
 This project is a Flask-based blog website that has been developed based on the course by [@flatplanet](https://github.com/flatplanet). The website is designed to allow users to create, read, and interact with blog posts. It utilizes the Flask web framework and employs a MySQL database to manage and store the blog content.
 
 ## Features
