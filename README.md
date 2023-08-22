@@ -9,9 +9,6 @@ This project is a Flask-based blog website that has been developed based on the 
 - User registration and authentication.
 - MySQL database integration.
 
-## Future Features 
-- Interact with blog posts (likes, comments, etc.).
-
 ## Installation
 
 1. Clone the repository to your local machine:
@@ -52,6 +49,16 @@ This project is a Flask-based blog website that has been developed based on the 
    ```
    flask run
    ```
+## Admin Account with Admin Privileges:
+   - Username: admin
+   - Password: admin
+
+## Future Features
+I have plans for future enhancements to the Flask Blog Website. Some of the upcoming features include:
+- Enhanced user profiles.
+- Advanced search and filtering options.
+- Social media integration.
+- Interact with blog posts (likes, comments, etc.).
 
 ## Contributing
 
