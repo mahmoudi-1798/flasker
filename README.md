@@ -58,7 +58,7 @@ I have plans for future enhancements to the Flask Blog Website. Some of the upco
 - Enhanced user profiles.
 - Advanced search and filtering options.
 - Social media integration.
-- Interact with blog posts (likes, comments, etc.).
+- Interact with blog posts (likes, comments, etc.)
 
 ## Contributing
 
